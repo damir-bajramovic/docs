@@ -1,0 +1,59 @@
+---
+title: 'Introduction'
+description: 'DLN - the finest bridging protocol there is'
+icon: 'text-size'
+---
+
+deBridge Liquidity Network uses a 0-TVL cross-chain trading infrastructure to facilitate high-performance cross-chain exchange. 
+Instead of using liquidity pools, the DLN executes all trades asynchronously through a self-organized liquidity network, providing developers 
+and projects with the ability to leverage the fastest cross-chain experience on the market and transfer liquidity and information with faster 
+time to finality than any legacy cross-chain solution.
+
+```mermaid
+stateDiagram-v2
+    %% --- states declared explicitly so we can style them ---
+    state Start
+    state End
+    state Created
+    state Fulfilled
+    state SentUnlock
+    state ClaimedUnlock
+    state OrderCancelled
+    state SentOrderCancelled
+    state ClaimedOrderCancel
+
+    %% --- initial entry ---
+    [*] --> Start
+
+    %% --- transitions from Start / Created ---
+    Start --> Created : Order Created on Source Chain
+    Created --> Fulfilled : Order Fulfilled on Destination Chain
+    Created --> OrderCancelled : Order Canceled on Destination Chain
+
+    %% --- fulfilled path ---
+    Fulfilled --> SentUnlock : Cross-Chain Message Sent
+    SentUnlock --> ClaimedUnlock : Order Claimed by Solver
+    ClaimedUnlock --> End
+
+    %% --- cancelled path ---
+    OrderCancelled --> SentOrderCancelled : Cross-Chain Message Sent
+    SentOrderCancelled --> ClaimedOrderCancel : Order Claimed on Source Chain
+    ClaimedOrderCancel --> End
+
+    %% --- styling for Start / End nodes ---
+    style Start fill:#90EE90,stroke:#333,stroke-width:1px,color:#000
+    style End   fill:#FF6347,stroke:#333,stroke-width:1px,color:#fff
+
+```
+
+By shifting the cross-chain paradigm from bridging to networking, deBridge enables myriad unique features for applications and users:
+- Near-instant settlement
+- Limit orders for any cross-chain trade
+- Zero slippage on any order size
+- Unlimited market depth
+- Guaranteed rates and low fees
+- Native token trading (no custodial risks of wrapped assets)
+- Zero locked liquidity at risk (0-TVL)
+- Rapidly scalable (can process any trading volume)
+- Gasless limit orders (users can commit orders without any upfront costs — tokens are deducted only if execution is guaranteed on the destination chain) (coming soon)
+- Order + call data allows adding instructions to be executed together alongside order fulfillment

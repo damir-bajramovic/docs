@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "theme": "palm",
+  "name": "deBridge",
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
@@ -35,7 +35,21 @@
         ]
       },
       {
+        "tab": "deBridge Liquidity Network",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "overview/introduction",
+              "overview/protocol-overview",
+              "overview/deployments"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "API Reference",
+        "openapi": "https://dln.debridge.finance/v1.0-json",
         "groups": [
           {
             "group": "API Documentation",
@@ -59,18 +73,13 @@
       "anchors": [
         {
           "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
+          "href": "https://docs.debridge.finance",
           "icon": "book-open-cover"
         },
         {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Discord",
+          "href": "https://discord.com/invite/deBridge",
+          "icon": "discord"
         }
       ]
     }
