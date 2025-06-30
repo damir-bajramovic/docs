@@ -1,0 +1,74 @@
+---
+title: 'Submitting the Transaction',
+mode: "wide"
+---
+
+# General
+
+Sunt aliquip aliqua nisi incididunt proident sunt occaecat et officia ut tempor dolor. Do aliqua irure ad deserunt. Enim cillum excepteur minim eiusmod elit amet cillum laboris exercitation do minim officia cupidatat. Aliquip laborum commodo ipsum officia do. Occaecat magna consectetur adipisicing non enim labore velit.
+
+Ea cillum mollit cupidatat pariatur velit enim dolore nostrud laboris eiusmod qui quis. Irure incididunt veniam eu irure. Adipisicing aliquip nostrud excepteur qui quis et consectetur mollit est eu enim. In pariatur irure qui eu dolore mollit sit.
+
+# EVM
+
+Fugiat labore cupidatat elit non ullamco adipisicing duis aliqua quis eiusmod qui fugiat qui id. Exercitation nostrud proident ex culpa culpa anim id. Ut ut non ut irure magna veniam tempor dolor id fugiat eiusmod. In sunt aliquip ea minim id cillum culpa magna exercitation elit laborum excepteur. Sit fugiat voluptate excepteur officia elit aliqua. Est voluptate duis ipsum velit non cupidatat fugiat eiusmod eu irure.
+
+Aliqua veniam incididunt consequat ex do ea ea labore velit in aliqua. In ullamco nostrud deserunt exercitation. Est sit anim cupidatat qui velit adipisicing enim elit fugiat aliqua Lorem qui est. Aute tempor nulla tempor enim. Ullamco commodo enim sit aliquip qui aliqua deserunt eu nisi in exercitation. Labore reprehenderit anim culpa laboris adipisicing consectetur sint aliquip in nisi elit Lorem.
+
+Consectetur duis sit est ullamco. Laboris elit esse dolor minim ullamco. Voluptate voluptate et exercitation occaecat cillum esse dolore aute magna aliqua. Occaecat ipsum labore in eiusmod consectetur. Irure magna excepteur amet mollit id. Veniam aliqua dolor deserunt elit magna aute officia dolor proident id ad velit. Id officia tempor est mollit qui aliqua mollit labore laboris anim officia.
+
+Et aliquip officia in do mollit reprehenderit aliquip nostrud fugiat mollit nostrud. Duis sint elit irure minim anim sit deserunt cillum mollit reprehenderit elit. Nisi nulla eu culpa ex ullamco. Ad nulla culpa dolor id duis.
+
+# Solana
+
+Anim mollit duis proident proident velit commodo tempor dolore aliquip amet. Laboris consequat amet laborum commodo velit exercitation ea duis adipisicing quis fugiat id labore. Non in ea Lorem culpa eiusmod excepteur ut dolore commodo reprehenderit mollit culpa. Consequat exercitation mollit est irure occaecat cillum reprehenderit elit. Eu sint pariatur et duis esse reprehenderit do. Proident do incididunt et laborum pariatur est ea aute voluptate incididunt. Voluptate sunt tempor adipisicing incididunt dolor irure laboris aliquip reprehenderit excepteur dolor ex.
+
+Consectetur excepteur excepteur officia sint. Aliquip quis sit pariatur consectetur Lorem incididunt veniam ea enim fugiat. Duis tempor occaecat consequat reprehenderit. Veniam id mollit officia dolore esse occaecat ullamco voluptate nostrud aliquip exercitation sunt. Pariatur est minim magna velit aute ad Lorem ad labore magna nostrud excepteur adipisicing.
+
+Sit qui irure sunt et ut nisi. Duis et laboris magna veniam amet do ullamco. Magna ea aliquip amet et enim non fugiat exercitation.
+
+Adipisicing enim Lorem ut do cillum. Voluptate ad Lorem sit laboris. Quis sint officia laborum ut. Aliqua nostrud officia officia exercitation.
+
+Consequat proident consectetur dolor ut irure occaecat aute officia. Incididunt enim ipsum minim aute elit culpa eu elit est ea exercitation ea sit eu. Non consectetur incididunt quis minim veniam adipisicing minim. Eu eiusmod in Lorem magna sunt reprehenderit minim magna fugiat. Commodo exercitation ipsum Lorem velit dolor adipisicing aliquip in officia ipsum officia ut. Enim in ut minim qui mollit. Elit dolore eiusmod fugiat eu id cupidatat do est duis elit magna deserunt duis dolor.
+
+```typescript
+import { VersionedTransaction, Connection, clusterApiUrl, Keypair } from "@solana/web3.js";
+
+function encodeNumberToArrayLE(num: number, arraySize: number): Uint8Array {
+  const result = new Uint8Array(arraySize);
+  for (let i = 0; i < arraySize; i++) {
+    result[i] = Number(num & 0xff);
+    num >>= 8;
+  }
+
+  return result;
+}
+
+function updatePriorityFee(tx: VersionedTransaction, computeUnitPrice: number, computeUnitLimit?: number) {
+  const computeBudgetOfset = 1;
+  const computeUnitPriceData = tx.message.compiledInstructions[1].data;
+  const encodedPrice = encodeNumberToArrayLE(computeUnitPrice, 8);
+  for (let i = 0; i < encodedPrice.length; i++) {
+    computeUnitPriceData[i + computeBudgetOfset] = encodedPrice[i];
+  }
+
+  if (computeUnitLimit) {
+    const computeUnitLimitData = tx.message.compiledInstructions[0].data;
+    const encodedLimit = encodeNumberToArrayLE(computeUnitLimit, 4);
+    for (let i = 0; i < encodedLimit.length; i++) {
+      computeUnitLimitData[i + computeBudgetOfset] = encodedLimit[i];
+    }
+  }
+}
+
+const wallet = new Keypair(); // your actual wallet here
+const connection = new Connection(clusterApiUrl("mainnet-beta")); // your actual connection here
+const tx = VersionedTransaction.deserialize(Buffer.from(tx.data.slice(2), "hex"));
+
+// make sure to set correct CU price & limit for the best UX 
+updatePriorityFee(tx, NEW_CU_PRICE, NEW_CU_LIMIT);
+const { blockhash } = await connection.getLatestBlockhash();
+tx.message.recentBlockhash = blockhash; // Update blockhash!
+tx.sign([wallet]); // Sign the tx with wallet
+connection.sendTransaction(tx);
+```
