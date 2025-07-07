@@ -1,13 +1,13 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "palm",
-  "name": "deBridge",
+  "name": "deBridge Liquidity Network",
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.ico",
   "navigation": {
     "tabs": [
       {
@@ -102,24 +102,11 @@
       },
       {
         "tab": "API Reference",
-        "openapi": "https://dln.debridge.finance/v1.0-json",
-        "groups": [
-          {
-            "group": "API Documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint Examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
-          }
-        ]
+        "openapi": "swagger/create-tx.json"
+      },
+      {
+        "tab": "Monitoring API",
+        "openapi": "/swagger/monitoring.json"
       },
       {
         "tab": "Other Ways to Integrate",
@@ -150,21 +137,31 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://docs.debridge.finance",
-          "icon": "book-open-cover"
+          "anchor": "deBridge Home",
+          "href": "https://acme-68677d63.mintlify.app/",
+          "icon": "house"
         },
         {
-          "anchor": "Discord",
-          "href": "https://discord.com/invite/deBridge",
+          "anchor": "deBridge Messaging Protocol",
+          "href": "https://acme-fc8786fa.mintlify.app/",
+          "icon": "envelope"
+        },
+        {
+          "anchor": "deBridge Liquidity Network",
+          "href": "https://acme-1c46979f.mintlify.app/",
+          "icon": "envelope-open-dollar"
+        },
+        {
+          "anchor": "Community",
+          "href": "https://mintlify.com/community",
           "icon": "discord"
         }
       ]
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/debridge-dark.svg",
+    "dark": "/logo/debridge-dark.svg"
   },
   "navbar": {
     "links": [

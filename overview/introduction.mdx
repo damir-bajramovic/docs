@@ -8,42 +8,7 @@ Instead of using liquidity pools, the DLN executes all trades asynchronously thr
 and projects with the ability to leverage the fastest cross-chain experience on the market and transfer liquidity and information with faster 
 time to finality than any legacy cross-chain solution.
 
-```mermaid
-stateDiagram-v2
-    %% --- states declared explicitly so we can style them ---
-    state Start
-    state End
-    state Created
-    state Fulfilled
-    state SentUnlock
-    state ClaimedUnlock
-    state OrderCancelled
-    state SentOrderCancelled
-    state ClaimedOrderCancel
-
-    %% --- initial entry ---
-    [*] --> Start
-
-    %% --- transitions from Start / Created ---
-    Start --> Created : Order Created on Source Chain
-    Created --> Fulfilled : Order Fulfilled on Destination Chain
-    Created --> OrderCancelled : Order Canceled on Destination Chain
-
-    %% --- fulfilled path ---
-    Fulfilled --> SentUnlock : Cross-Chain Message Sent
-    SentUnlock --> ClaimedUnlock : Order Claimed by Solver
-    ClaimedUnlock --> End
-
-    %% --- cancelled path ---
-    OrderCancelled --> SentOrderCancelled : Cross-Chain Message Sent
-    SentOrderCancelled --> ClaimedOrderCancel : Order Claimed on Source Chain
-    ClaimedOrderCancel --> End
-
-    %% --- styling for Start / End nodes ---
-    style Start fill:#90EE90,stroke:#333,stroke-width:1px,color:#000
-    style End   fill:#FF6347,stroke:#333,stroke-width:1px,color:#fff
-
-```
+![Bridging](/images/DLN-intro.png)
 
 By shifting the cross-chain paradigm from bridging to networking, deBridge enables myriad unique features for applications and users:
 - Near-instant settlement
